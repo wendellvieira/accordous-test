@@ -22,12 +22,27 @@ services:
       - MYSQL_PASSWORD=test
 
   # PHP (with Caddy)
-  app:
+  api:
     image: ambientum/php:7.2-nginx
-    container_name: test-app
+    container_name: test-api
     volumes:
-      - .:/var/www/app
+      - ./api:/var/www/app
     ports:
-      - "80:8080"
+      - "3000:8080"
     links:
       - mysql
+
+  web:
+    container_name: teste-web
+    build:
+      context: ./web
+    volumes:
+      - ./web/src:/node-app/src
+      - ./web/public:/node-app/public
+    depends_on:
+      - api
+      - mysql
+    links:
+      - api
+    ports:
+      - "80:8080"
