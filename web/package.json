@@ -6,9 +6,8 @@
   "author": "Wendell Vieira <wendell.vieiracunha@gmail.com>",
   "private": true,
   "scripts": {
-	"dev": "npx quasar dev",
-	"build": "npx quasar build",
-	"build:pwa": "npx quasar build -m pwa",
+	"dev": "quasar dev",
+	"build": "quasar build",
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
