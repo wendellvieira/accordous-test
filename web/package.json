@@ -6,14 +6,15 @@
   "author": "Wendell Vieira <wendell.vieiracunha@gmail.com>",
   "private": true,
   "scripts": {
-	"dev": "quasar dev",
-	"build": "quasar build",
+    "dev": "quasar dev",
+    "build": "quasar build",
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
     "axios": "^0.18.1",
     "core-js": "^3.6.5",
+    "lodash": "^4.17.20",
     "quasar": "^1.0.0"
   },
   "devDependencies": {
