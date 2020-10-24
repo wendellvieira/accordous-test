@@ -19,9 +19,6 @@
       ],
       "assets/*": [
         "src/assets/*"
-	  ],
-	  "utils/*": [
-        "src/utils/*"
       ],
       "boot/*": [
         "src/boot/*"
