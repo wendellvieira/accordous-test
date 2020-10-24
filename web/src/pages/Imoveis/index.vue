@@ -1,13 +1,22 @@
 <template>
-	<q-page>
-		Imoveis
-	</q-page>
+    <q-page>
+        Imoveis
+    </q-page>
 </template>
 
 <script>
-	export default {
+import SetPageMixin from "utils/setPage.mixin"
 
-	}
+export default {
+    mixins: [
+        SetPageMixin
+    ],
+
+    mounted() {
+        this.$setPage("Imoveis")
+    },
+
+}
 </script>
 
 <style lang="scss" scoped>

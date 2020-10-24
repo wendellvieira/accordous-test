@@ -75,10 +75,7 @@
 </template>
 
 <script>
-import {
-    mapMutations
-} from "vuex"
-
+import SetPageMixin from "utils/setPage.mixin"
 import defaultData from "./defaultData.js"
 
 import {
@@ -147,11 +144,9 @@ export default {
         }
     },
 
-    methods: {
-        ...mapMutations("MAIN_LAYOUT", {
-            $setPage: "SET_PAGE"
-        })
-    },
+    mixins: [
+        SetPageMixin
+    ],
 
     mounted() {
         this.$setPage("Criar Imovel")
