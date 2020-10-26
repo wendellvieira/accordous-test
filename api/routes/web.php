@@ -16,4 +16,5 @@ use Illuminate\Support\Facades\Route;
 Route::group([ "prefix" => "imoveis" ], function() {
 	Route::post( "", 'ImoveisController@create');
 	Route::get( "", 'ImoveisController@index');
+	Route::delete( "{id}", 'ImoveisController@delete');
 });

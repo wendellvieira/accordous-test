@@ -15,4 +15,10 @@ class ImoveisController extends Controller
 	public function index(){
 		return Imovel::get();
 	}
+
+	public function delete($id){
+		$imovel = Imovel::findOrFail($id);
+
+		return $imovel->delete();
+	}
 }
