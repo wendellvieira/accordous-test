@@ -2,7 +2,12 @@
     <q-page>
         <div class="cnt-form q-ma-lg q-gutter-y-lg">
 
-            <q-input outlined v-model="data.email" label="Email" />
+            <q-input
+                outlined
+                v-model="data.email"
+                label="Email"
+                :error-message='errors.email'
+                :error='!!errors.email' />
 
             <div class="row">
                 <div class="col-sm-6 col-xs-12">
@@ -12,8 +17,8 @@
                         :loading='cepLoading'
                         :readonly='disabled.cep'
                         mask='#####-###'
-                        :error='cepError'
-                        error-message='Entre com os dados manualmente!'
+                        :error='cepError || !!errors.cep'
+                        :error-message=' !!errors.cep ? errors.cep : "Entre com os dados manualmente!"'
                         label="CEP" />
                 </div>
             </div>
@@ -25,7 +30,9 @@
                         outlined
                         v-model="data.localidade"
                         :readonly='disabled.localidade'
-                        label="Cidade" />
+                        label="Cidade"
+                        :error-message='errors.localidade'
+                        :error='!!errors.localidade' />
                 </div>
 
                 <div class="col-sm-4 col-xs-12">
@@ -33,7 +40,9 @@
                         outlined
                         v-model="data.uf"
                         :readonly='disabled.uf'
-                        label="UF" />
+                        label="UF"
+                        :error-message='errors.uf'
+                        :error='!!errors.uf' />
                 </div>
             </div>
 
@@ -43,7 +52,9 @@
                         outlined
                         v-model="data.logradouro"
                         :readonly='disabled.logradouro'
-                        label="Rua" />
+                        label="Rua"
+                        :error-message='errors.logradouro'
+                        :error='!!errors.logradouro' />
 
                 </div>
                 <div class="col-sm-6 col-xs-12">
@@ -51,7 +62,9 @@
                         outlined
                         v-model="data.bairro"
                         :readonly='disabled.bairro'
-                        label="Bairro" />
+                        label="Bairro"
+                        :error-message='errors.bairro'
+                        :error='!!errors.bairro' />
 
                 </div>
             </div>
@@ -62,10 +75,17 @@
                         outlined
                         v-model="data.numero"
                         ref='numero'
-                        label="Número" />
+                        label="Número"
+                        :error-message='errors.numero'
+                        :error='!!errors.numero' />
                 </div>
                 <div class="col-sm-6 col-xs-12">
-                    <q-input outlined v-model="data.complemento" label="Complemento" />
+                    <q-input
+                        outlined
+                        v-model="data.complemento"
+                        label="Complemento"
+                        :error-message='errors.complemento'
+                        :error='!!errors.complemento' />
                 </div>
             </div>
 
@@ -74,7 +94,9 @@
                     label='Criar imovel'
                     @click='salvarImovel'
                     color='primary'
-                    size='lg' />
+                    size='lg'
+                    :loading='sending'
+                    :disable='sending' />
             </div>
 
         </div>
@@ -84,7 +106,15 @@
 
 <script>
 import SetPageMixin from "utils/setPage.mixin"
-import defaultData from "./defaultData.js"
+
+import {
+    positive,
+    error
+} from "utils/notifications"
+
+import defaultData, {
+    validate
+} from "./dbo"
 
 import {
     clone
@@ -103,7 +133,10 @@ export default {
                 uf: true,
                 logradouro: true,
                 bairro: true,
-            }
+            },
+            errors: {},
+
+            sending: false
         }
     },
 
@@ -157,8 +190,32 @@ export default {
     },
 
     methods: {
-        salvarImovel() {
-            this.$axios.post("/imoveis", this.data)
+        async salvarImovel() {
+            try {
+                this.sending = true
+                this.$set(this, 'errors', {})
+                const err = await validate(this.data)
+
+                if (!!err) {
+                    this.$set(this, 'errors', err)
+                    this.sending = false
+                    return;
+                }
+
+                await this.$axios.post("/imoveis", this.data)
+
+                this.$q.notify(positive)
+
+                this.$set(this, 'data', clone(defaultData))
+                this.sending = false
+
+            } catch (e) {
+                this.$q.notify({
+                    ...error,
+                    message: 'Não foi possível salvar os dados!'
+                })
+                this.sending = false
+            }
         }
     },
 
