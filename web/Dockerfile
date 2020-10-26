@@ -8,6 +8,6 @@ RUN npm i
 
 COPY . .
 
-EXPOSE 8080
+EXPOSE 8080 4000
 
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "concurrently:dev:ui"]

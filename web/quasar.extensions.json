@@ -1,0 +1,11 @@
+{
+  "@quasar/testing-unit-jest": {
+    "babel": "babelrc",
+    "options": [
+      "scripts",
+      "SFC",
+      "wallabyjs",
+      "majestic"
+    ]
+  }
+}

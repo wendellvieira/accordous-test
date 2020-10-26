@@ -8,7 +8,15 @@
   "scripts": {
     "dev": "quasar dev",
     "build": "quasar build",
-    "test": "echo \"No test specified\" && exit 0"
+    "test": "echo \"See package.json => scripts for available tests.\" && exit 0",
+    "test:unit": "jest --updateSnapshot",
+    "test:unit:coverage": "jest --coverage",
+    "test:unit:watch": "jest --watch",
+    "test:unit:watchAll": "jest --watchAll",
+    "serve:test:coverage": "quasar serve test/jest/coverage/lcov-report/ --port 8788",
+    "concurrently:dev:jest": "concurrently \"quasar dev\" \"jest --watch\"",
+    "concurrently:dev:ui": "concurrently \"quasar dev\" \"majestic\"",
+    "test:unit:ui": "majestic"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
@@ -18,7 +26,16 @@
     "quasar": "^1.0.0"
   },
   "devDependencies": {
-    "@quasar/app": "^2.0.0"
+    "@quasar/app": "^2.0.0",
+    "@quasar/quasar-app-extension-testing-unit-jest": "^2.0.0",
+    "eslint-plugin-jest": "^23.8.2",
+    "wallaby-vue-compiler": "^1.0.3",
+    "majestic": "^1.2.24"
+  },
+  "majestic": {
+	"args": [
+		"--silent"
+	]
   },
   "browserslist": [
     "last 10 Chrome versions",

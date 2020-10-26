@@ -13,6 +13,7 @@
                         :readonly='disabled.cep'
                         mask='#####-###'
                         :error='cepError'
+                        name="cep"
                         error-message='Entre com os dados manualmente!'
                         label="CEP" />
                 </div>
@@ -22,6 +23,7 @@
                 <div class="col-sm-8 col-xs-12">
                     <q-input
                         ref='cidade'
+                        name='cidade'
                         outlined
                         v-model="data.localidade"
                         :readonly='disabled.localidade'
