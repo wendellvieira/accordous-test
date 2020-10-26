@@ -1,19 +1,117 @@
 <template>
     <q-page>
-        Imoveis
+        <q-table
+            class='no-shadow'
+            :data="data"
+            :columns="columns"
+            row-key="id">
+
+            <template v-slot:body="props">
+                <q-tr :props="props">
+                    <q-td key="id" :props="props">
+                        {{ props.row.id }}
+                    </q-td>
+
+                    <q-td key="email" :props="props">
+                        {{ props.row.email }}
+                    </q-td>
+
+                    <q-td key="endereco" :props="props">
+                        {{props.row.logradouro}},
+                        {{props.row.numero}},
+                        {{props.row.localidade}},
+                        {{props.row.uf}}
+                    </q-td>
+
+                    <q-td key="status" :props="props">
+                        <q-badge color="green">
+                            Contratado
+                        </q-badge>
+                    </q-td>
+                    <q-td key="acao" :props="props">
+                        <imovel-delete :imovel='props.row' />
+                    </q-td>
+                </q-tr>
+            </template>
+
+        </q-table>
     </q-page>
 </template>
 
 <script>
 import SetPageMixin from "utils/setPage.mixin"
+import ImovelDelete from "./components/imovel-delete"
 
 export default {
+
+    data() {
+        return {
+            data: [],
+            columns: [{
+                    name: "id",
+                    label: '#',
+                    align: 'left',
+                    sortable: true,
+                    field: 'id'
+                },
+                {
+                    name: 'email',
+                    label: 'Email',
+                    align: 'left',
+                    field: 'email',
+                    sortable: true
+                },
+                {
+                    name: 'endereco',
+                    label: 'Endereço',
+                    align: 'left',
+                    field: row => `${row.logradouro}, ${row.numero}, ${row.localidade}, ${row.uf}`,
+                    sortable: true
+                },
+                {
+                    name: 'status',
+                    label: 'Status',
+                    align: 'left',
+                    field: () => false,
+                    sortable: true
+                },
+                {
+                    name: 'acao',
+                    label: '',
+                    align: 'right',
+                    field: () => false
+                },
+            ]
+        }
+    },
+
+    components: {
+        ImovelDelete
+    },
+
+    provide() {
+        return {
+            $update: () => this.list()
+        }
+    },
+
     mixins: [
         SetPageMixin
     ],
 
+    methods: {
+
+        async list() {
+            const {
+                data
+            } = await this.$axios.get("/imoveis")
+            this.data = data
+        }
+    },
+
     mounted() {
         this.$setPage("Imoveis")
+        this.list()
     },
 
 }
