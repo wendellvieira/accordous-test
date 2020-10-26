@@ -51,17 +51,36 @@
                     label='Novo Contrato'
                     color="secondary"
                     icon="file_copy"
-                    to='/contratos/novo' />
+                    @click='$refs.MdNovoContrato.open()' />
             </q-fab>
         </q-page-sticky>
+
+        <md-novo-contrato ref='MdNovoContrato' />
     </q-page>
 </template>
 
 <script>
 import SetPageMixin from "utils/setPage.mixin"
 import ImovelDelete from "./components/imovel-delete"
+import MdNovoContrato from "./components/md-novo-contrato"
 
 export default {
+
+    components: {
+        ImovelDelete,
+        MdNovoContrato
+    },
+
+    provide() {
+        return {
+            $update: fx => this.list(fx),
+            $getImoveis: () => this.data
+        }
+    },
+
+    mixins: [
+        SetPageMixin
+    ],
 
     data() {
         return {
@@ -103,20 +122,6 @@ export default {
             ]
         }
     },
-
-    components: {
-        ImovelDelete
-    },
-
-    provide() {
-        return {
-            $update: fx => this.list(fx)
-        }
-    },
-
-    mixins: [
-        SetPageMixin
-    ],
 
     methods: {
 
