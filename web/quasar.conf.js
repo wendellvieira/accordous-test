@@ -5,7 +5,6 @@
 
 // Configuration for your app
 // https://quasar.dev/quasar-cli/quasar-conf-js
-const path = require('path')
 
 module.exports = function (/* ctx */) {
   return {
@@ -32,7 +31,7 @@ module.exports = function (/* ctx */) {
     extras: [
       // 'ionicons-v4',
       // 'mdi-v5',
-      'fontawesome-v5',
+      // 'fontawesome-v5',
       // 'eva-icons',
       // 'themify',
       // 'line-awesome',
@@ -64,12 +63,6 @@ module.exports = function (/* ctx */) {
 
       // https://quasar.dev/quasar-cli/handling-webpack
       extendWebpack (cfg) {
-		cfg.resolve.alias = {
-			...cfg.resolve.alias, // This adds the existing alias
-
-			// Add your own alias like this
-			utils: path.resolve(__dirname, './src/utils'),
-		  }
       },
     },
 
