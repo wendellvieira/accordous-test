@@ -11,4 +11,8 @@ class ImoveisController extends Controller
 		$imovel = Imovel::create( $data->toArray() );
 		return $imovel;
 	}
+
+	public function index(){
+		return Imovel::get();
+	}
 }
