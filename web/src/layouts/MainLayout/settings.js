@@ -5,10 +5,10 @@ export const MapMenu = [
 		icon: 'business',
 		link: '/imoveis'
 	},
-	{
-		title: 'Contratos',
-		caption: 'Gerenciamento de contratos',
-		icon: 'file_copy',
-		link: '/contratos'
-	},
+	// {
+	// 	title: 'Contratos',
+	// 	caption: 'Gerenciamento de contratos',
+	// 	icon: 'file_copy',
+	// 	link: '/contratos'
+	// },
 ];
