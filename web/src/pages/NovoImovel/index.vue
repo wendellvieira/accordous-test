@@ -69,6 +69,14 @@
                 </div>
             </div>
 
+            <div class="">
+                <q-btn
+                    label='Criar imovel'
+                    @click='salvarImovel'
+                    color='primary'
+                    size='lg' />
+            </div>
+
         </div>
 
     </q-page>
@@ -113,7 +121,11 @@ export default {
 
                     if (data.erro) throw new Exception();
 
-                    this.$set(this, "data", data)
+                    this.$set(this, "data", {
+                        ...this.data,
+                        ...data
+                    })
+
                     this.$refs.numero.focus()
                     this.disabled.cep = false
                     this.cepLoading = false
@@ -141,6 +153,12 @@ export default {
                 }
 
             }
+        }
+    },
+
+    methods: {
+        salvarImovel() {
+            this.$axios.post("/imoveis", this.data)
         }
     },
 
