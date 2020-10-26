@@ -35,6 +35,25 @@
             </template>
 
         </q-table>
+
+        <q-page-sticky position="bottom-right" :offset="[18, 18]">
+            <q-fab color="primary" icon="add" direction="up">
+                <q-fab-action
+                    external-label
+                    label-position="left"
+                    label='Novo Imovel'
+                    color="positive"
+                    icon="business"
+                    to='/imoveis/novo' />
+                <q-fab-action
+                    external-label
+                    label-position="left"
+                    label='Novo Contrato'
+                    color="secondary"
+                    icon="file_copy"
+                    to='/contratos/novo' />
+            </q-fab>
+        </q-page-sticky>
     </q-page>
 </template>
 
@@ -91,7 +110,7 @@ export default {
 
     provide() {
         return {
-            $update: () => this.list()
+            $update: fx => this.list(fx)
         }
     },
 
@@ -101,11 +120,12 @@ export default {
 
     methods: {
 
-        async list() {
-            const {
-                data
-            } = await this.$axios.get("/imoveis")
-            this.data = data
+        async list(fx = null) {
+            const req = await this.$axios.get("/imoveis")
+
+            if (!!fx) fx()
+
+            this.data = req.data
         }
     },
 

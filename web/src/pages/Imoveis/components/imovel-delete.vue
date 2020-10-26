@@ -32,14 +32,16 @@ export default {
 
                 await this.$axios.delete(`/imoveis/${this.imovel.id}`)
 
-                this.$q.notify({
-                    ...positive,
-                    message: "Registro excluído com sucesso!"
+                this.$update(() => {
+
+                    this.$q.notify({
+                        ...positive,
+                        message: "Registro excluído com sucesso!"
+                    })
+
+                    this.sending = false
+
                 })
-
-                this.$update()
-
-                this.sending = false
 
             } catch (e) {
                 console.log(e)
