@@ -114,7 +114,7 @@ import {
 
 import defaultData, {
     validate
-} from "./dbo"
+} from "utils/dto/imovel"
 
 import {
     clone

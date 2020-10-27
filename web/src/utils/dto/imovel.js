@@ -1,5 +1,5 @@
-import * as Yup from "yup"
-import errorTransform from "utils/errorTransform"
+
+import { Yup, errorTransform } from "./yup-utils"
 
 export default {
 	email: "",
