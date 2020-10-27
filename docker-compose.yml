@@ -7,6 +7,13 @@ volumes:
     driver: local
 
 services:
+  redis:
+    image: redis
+    container_name: test-redis
+    command: redis-server --requirepass test
+    ports:
+      - "6379:6379"
+
   # MySQL (5.7)
   mysql:
     image: mysql:5.7
@@ -31,6 +38,18 @@ services:
       - "3000:8080"
     links:
       - mysql
+      - redis
+
+  queue:
+    build:
+      context: ./api
+    container_name: laravel-queue
+    env_file: ./api/.env
+    volumes:
+      - ./api:/app
+    links:
+      - mysql
+      - redis
 
   web:
     container_name: teste-web
