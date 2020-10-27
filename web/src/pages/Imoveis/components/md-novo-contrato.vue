@@ -20,6 +20,8 @@
                     @filter="filterFn"
                     emit-value
                     map-options
+                    :error-message='error.propriedade'
+                    :error='!!error.propriedade'
                     options-selected-class="text-primary">
                     <template v-slot:option="scope">
                         <q-item v-bind="scope.itemProps" v-on="scope.itemEvents">
@@ -37,6 +39,8 @@
                             outlined
                             v-model="data.tipo_documento"
                             :options="tipos_documentos"
+                            :error-message='error.tipo_documento'
+                            :error='!!error.tipo_documento'
                             emit-value
                             map-options />
                     </div>
@@ -44,21 +48,36 @@
                         <q-input
                             v-if='data.tipo_documento == "cpf"'
                             outlined
+                            :error-message='error.documento'
+                            :error='!!error.documento'
                             v-model="data.documento"
                             label="CPF"
                             mask='###.###.###-##' />
+
                         <q-input
                             v-else
                             outlined
+                            :error-message='error.documento'
+                            :error='!!error.documento'
                             v-model="data.documento"
                             label="CNPJ"
                             mask='##.###.###/####-##' />
                     </div>
                 </div>
 
-                <q-input outlined v-model="data.email" label="Nome" />
+                <q-input
+                    :error-message='error.nome'
+                    :error='!!error.nome'
+                    outlined
+                    v-model="data.nome"
+                    label="Nome" />
 
-                <q-input outlined v-model="data.nome" label="Email" />
+                <q-input
+                    :error-message='error.email'
+                    :error='!!error.email'
+                    outlined
+                    v-model="data.email"
+                    label="Email" />
 
             </q-card-section>
 
@@ -74,7 +93,13 @@
                         class='q-mr-lg'
                         v-close-popup />
 
-                    <q-btn label="Gerar" class='q-px-lg' color="primary" />
+                    <q-btn
+                        label="Gerar"
+                        @click="criarContrato"
+                        class='q-px-lg'
+                        color="primary"
+                        :loading='sending'
+                        :disable='sending' />
                 </div>
             </q-card-actions>
         </q-card>
@@ -82,18 +107,30 @@
 </template>
 
 <script>
-import defaultData from 'utils/dbo/contrato'
+import defaultData, {
+    validate
+} from 'utils/dto/contrato'
+
 import {
     clone
 } from "lodash"
+
+import {
+    positive,
+    error
+} from "utils/notifications"
+
 export default {
     inject: [
-        "$getImoveis"
+        "$getImoveis",
+        "$update"
     ],
     data() {
         return {
             dialog: false,
+            sending: false,
             search: '',
+            error: {},
 
             tipos_documentos: [{
                 label: 'Pessoa física',
@@ -108,13 +145,17 @@ export default {
     },
     computed: {
         imoveis() {
-            const imoveis = this.$getImoveis().map(imovel => {
-                return {
+            const imoveis = this.$getImoveis().reduce((acc, imovel) => {
+                if (!!imovel.contrato) return acc;
+
+                acc.push({
                     value: imovel.id,
                     label: `${imovel.logradouro}, ${imovel.numero}, ${imovel.localidade}, ${imovel.uf}`,
                     email: imovel.email
-                }
-            })
+                })
+
+                return acc
+            }, [])
 
             if (!this.search) return imoveis
             return imoveis.filter(item => {
@@ -126,6 +167,42 @@ export default {
         }
     },
     methods: {
+        async criarContrato() {
+            try {
+                this.sending = true
+                this.error = {}
+
+                const err = await validate(this.data)
+                if (!!err) {
+                    this.error = err
+                    this.sending = false
+                    return;
+                }
+
+                await this.$axios.post("/contratos", this.data)
+
+                this.$update(() => {
+                    this.$q.notify({
+                        ...positive,
+                        message: "Contrato criado com sucesso!"
+                    })
+
+                    this.$set(this, 'data', clone(defaultData))
+                    this.sending = false
+                    this.dialog = false
+                })
+
+                this.sending = false
+
+            } catch (e) {
+                console.log(e)
+                this.$q.notify({
+                    ...error,
+                    message: "Erro ao eviar pedido!"
+                })
+                this.sending = false
+            }
+        },
         open() {
             this.dialog = true
         },

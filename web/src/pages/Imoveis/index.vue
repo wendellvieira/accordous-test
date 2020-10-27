@@ -24,8 +24,11 @@
                     </q-td>
 
                     <q-td key="status" :props="props">
-                        <q-badge color="green">
+                        <q-badge v-if='props.row.contrato' color="green">
                             Contratado
+                        </q-badge>
+                        <q-badge v-else color="grey-7">
+                            Não contratado
                         </q-badge>
                     </q-td>
                     <q-td key="acao" :props="props">

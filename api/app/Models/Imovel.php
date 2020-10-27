@@ -21,4 +21,8 @@ class Imovel extends Model
 		"uf",
 		"complemento"
 	];
+
+	public function contrato(){
+		return $this->hasOne( Contrato::class, 'propriedade' );
+	}
 }

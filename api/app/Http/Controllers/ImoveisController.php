@@ -13,7 +13,7 @@ class ImoveisController extends Controller
 	}
 
 	public function index(){
-		return Imovel::get();
+		return Imovel::with(["contrato"])->get();
 	}
 
 	public function delete($id){

@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::group([ "prefix" => "contratos" ], function() {
+	Route::post( "", 'ContratosController@create');
+	Route::get( "", 'ContratosController@index');
+});
+
 Route::group([ "prefix" => "imoveis" ], function() {
 	Route::post( "", 'ImoveisController@create');
 	Route::get( "", 'ImoveisController@index');
